@@ -5,7 +5,7 @@ let client = null
 
 export function connect(onOrder) {
   if (client) return client
-  const socket = new SockJS((import.meta.env.VITE_API_BASE || 'http://localhost:8080') + '/ws')
+  const socket = new SockJS((import.meta.env.VITE_API_BASE || 'https://restaurant-backend-production-a5f1.up.railway.app') + '/ws')
   client = new Client({
     webSocketFactory: () => socket,
     debug: () => {},
