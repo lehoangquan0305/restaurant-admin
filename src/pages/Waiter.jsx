@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+const API_URL = import.meta.env.VITE_API_BASE || 'https://restaurant-backend-production-a5f1.up.railway.app'
 
 export default function Waiter() {
   const [tables, setTables] = useState([])
