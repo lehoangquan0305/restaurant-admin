@@ -442,10 +442,17 @@ tbody tr:last-child td {
 
   .login-card {
     padding: 24px;
+    margin: 16px;
+    max-width: none;
   }
 
   .login-card h2 {
     font-size: 22px;
     margin-bottom: 20px;
+  }
+
+  .login-card input {
+    width: 100%;
+    box-sizing: border-box;
   }
 }
