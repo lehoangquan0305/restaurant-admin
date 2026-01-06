@@ -6,7 +6,7 @@ export default function Reports(){
   const [error, setError] = useState('')
   
   useEffect(()=>{
-    axios.get((import.meta.env.VITE_API_BASE||'https://restaurant-backend-production-a5f1.up.railway.app') + '/api/reports/summary/today', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }})
+    axios.get((import.meta.env.VITE_API_BASE||'https://restaurant-backend-production-4830.up.railway.app') + '/api/reports/summary/today', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }})
       .then(r=>{
         console.log('Reports data:', r.data)
         setData(r.data)
