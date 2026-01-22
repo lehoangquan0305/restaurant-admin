@@ -30,12 +30,16 @@ export default function Reports(){
   const [error, setError] = useState('')
   
   useEffect(()=>{
+<<<<<<< HEAD
     const API_BASE = import.meta.env.VITE_API_BASE||'https://restaurant-backend-production-4830.up.railway.app'
     const token = localStorage.getItem('token')
     const headers = { Authorization: 'Bearer ' + token }
     
     // Lấy dữ liệu hôm nay
     axios.get(API_BASE + '/api/reports/summary/today', { headers })
+=======
+    axios.get((import.meta.env.VITE_API_BASE||'https://restaurant-backend-production-4830.up.railway.app') + '/api/reports/summary/today', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }})
+>>>>>>> c882068bb51f6f484aee2c1f9677159deb6fc812
       .then(r=>{
         console.log('Reports data:', r.data)
         setData(r.data)

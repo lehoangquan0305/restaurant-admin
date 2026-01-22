@@ -33,6 +33,11 @@ export async function login(username, password){
   return r.data
 }
 
+export async function register(username, password){
+  const r = await instance.post('/api/auth/register', { username, password })
+  return r.data
+}
+
 // Tables
 export async function getTables(){ return (await instance.get('/api/tables')).data }
 export async function createTable(t){ return (await instance.post('/api/tables', t)).data }
