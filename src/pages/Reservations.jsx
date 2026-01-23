@@ -142,7 +142,10 @@ async function save(){
         
         // Lấy danh sách orders liên quan đến reservation này
         const allOrders = await getOrders();
-        const orders = allOrders.filter(o => o.reservation?.id === reservation.id);
+        console.log('All orders:', allOrders);
+        console.log('Reservation ID:', reservation.id);
+        const orders = allOrders.filter(o => o.reservation?.id == reservation.id);
+        console.log('Filtered orders:', orders);
         
         if (!orders || orders.length === 0) {
           setError('Không tìm thấy đơn hàng nào cho đặt bàn này');
