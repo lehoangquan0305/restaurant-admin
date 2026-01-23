@@ -46,7 +46,7 @@ export default function App(){
                 {isAdmin && <Link to="/tables" className="nav-item">🪑 Bàn ăn</Link>}
                 {(isWaiter || isAdmin) && <Link to="/reservations" className="nav-item">📅 Đặt bàn</Link>}
                 {isAdmin && <Link to="/menu" className="nav-item">📖 Menu</Link>}
-                {isAdmin && <Link to="/orders" className="nav-item">🛒 Đơn hàng</Link>}
+                {(isWaiter || isAdmin) && <Link to="/orders" className="nav-item">🛒 Đơn hàng</Link>}
                 {(isChef || isAdmin) && <Link to="/kitchen" className="nav-item">👨‍🍳 Bếp</Link>}
                 {(isWaiter || isAdmin) && <Link to="/waiter" className="nav-item">🍽️ Phục vụ</Link>}
                 {isAdmin && <Link to="/employees" className="nav-item">👥 Nhân viên</Link>}
@@ -57,7 +57,7 @@ export default function App(){
               <Routes>
                 <Route path="/" element={<ProtectedRoute roles={["ROLE_ADMIN"]}><Tables/></ProtectedRoute>} />
                 <Route path="/tables" element={<ProtectedRoute roles={["ROLE_ADMIN"]}><Tables/></ProtectedRoute>} />
-                <Route path="/orders" element={<ProtectedRoute roles={["ROLE_ADMIN"]}><Orders/></ProtectedRoute>} />
+                <Route path="/orders" element={<ProtectedRoute roles={["ROLE_WAITER","ROLE_ADMIN"]}><Orders/></ProtectedRoute>} />
                 <Route path="/kitchen" element={<ProtectedRoute roles={["ROLE_CHEF","ROLE_ADMIN"]}><Kitchen/></ProtectedRoute>} />
                 <Route path="/menu" element={<ProtectedRoute roles={["ROLE_ADMIN"]}><Menu/></ProtectedRoute>} />
                 <Route path="/reservations" element={<ProtectedRoute roles={["ROLE_WAITER","ROLE_ADMIN"]}><Reservations/></ProtectedRoute>} />

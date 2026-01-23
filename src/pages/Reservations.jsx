@@ -168,14 +168,19 @@ async function save(){
         const errors = [];
         
         for (const order of validOrders) {
-          try {
-            console.log('Creating invoice for order:', order.id);
-            const inv = await createInvoice(order.id);
-            invoices.push(inv);
-          } catch(err) {
-            console.error('Error creating invoice for order ' + order.id, err);
-            const errMsg = err?.response?.data?.error || err?.message || 'Lỗi không xác định';
-            errors.push(`Order ${order.id}: ${errMsg}`);
+          if (order.id === 'N/A') {
+            // Order giả, không cần createInvoice
+            invoices.push({ id: 'N/A', orderId: 'N/A', total: 0 });
+          } else {
+            try {
+              console.log('Creating invoice for order:', order.id);
+              const inv = await createInvoice(order.id);
+              invoices.push(inv);
+            } catch(err) {
+              console.error('Error creating invoice for order ' + order.id, err);
+              const errMsg = err?.response?.data?.error || err?.message || 'Lỗi không xác định';
+              errors.push(`Order ${order.id}: ${errMsg}`);
+            }
           }
         }
 
@@ -362,7 +367,6 @@ async function save(){
                     <td style={{display:'flex', gap:'6px'}}>
                       <button className="btn-sm" onClick={()=>edit(r)}>Sửa</button>
                       <button className="btn-sm btn-danger" onClick={()=>remove(r.id)}>Xóa</button>
-                      {r.status === 'COMPLETED' && <button className="btn-sm" style={{backgroundColor:'#27ae60', color:'white'}} onClick={()=>generateInvoice(r)}>📄 Xuất hóa đơn</button>}
                     </td>
                   </tr>
                 ))}
