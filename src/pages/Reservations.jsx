@@ -147,17 +147,20 @@ async function save(){
         const orders = allOrders.filter(o => o.reservation?.id == reservation.id);
         console.log('Filtered orders:', orders);
         
-        if (!orders || orders.length === 0) {
-          setError('Không tìm thấy đơn hàng nào cho đặt bàn này');
-          return;
+        let validOrders = [];
+        if (orders.length > 0) {
+          validOrders = orders.filter(o => o.items && o.items.length > 0);
         }
-
-        // Lọc orders có items (không yêu cầu total > 0 nữa)
-        const validOrders = orders.filter(o => o.items && o.items.length > 0);
         
+        // Nếu không có orders hợp lệ, tạo một "order" giả với thông tin reservation
         if (validOrders.length === 0) {
-          setError('Không có đơn hàng hợp lệ (không có items)');
-          return;
+          validOrders = [{
+            id: 'N/A',
+            items: [],
+            total: 0,
+            createdAt: reservation.reservationTime,
+            notes: 'Chưa có đơn hàng được tạo cho đặt bàn này.'
+          }];
         }
 
         // Tạo hóa đơn cho từng order hợp lệ
@@ -215,6 +218,8 @@ async function save(){
             });
             
             invoiceHTML += `</tbody></table>`;
+          } else {
+            invoiceHTML += `<p style="color: #666; font-style: italic;">${order.notes || 'Không có món ăn'}</p>`;
           }
           
           invoiceHTML += `<p style="text-align: right; font-size: 16px;"><strong>Tổng cộng: ${(order.total || 0).toLocaleString('vi-VN')} đ</strong></p>`;
