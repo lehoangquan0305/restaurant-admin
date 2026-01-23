@@ -1,6 +1,7 @@
   import React, {useEffect, useState} from 'react'
   import { getTables, getReservations, createReservation, updateReservation, deleteReservation, getOrders, getInvoiceByOrderId, createInvoice } from '../api'
   import Pagination from '../components/Pagination'
+  import html2pdf from 'html2pdf.js'
 
   export default function Reservations(){
     const [tables, setTables] = useState([])
@@ -150,7 +151,7 @@ async function save(){
         
         // Lấy danh sách orders liên quan đến reservation này
         const allOrders = await getOrders();
-        const orders = allOrders.filter(o => o.reservation?.id === reservation.id);
+        const orders = allOrders.filter(o => o.reservation?.id === reservation.id && o.status === 'COMPLETED');
         
         if (!orders || orders.length === 0) {
           setError('Không tìm thấy đơn hàng nào cho đặt bàn này');
@@ -235,14 +236,30 @@ async function save(){
         invoiceHTML += `<p>Ngày in: ${new Date().toLocaleString('vi-VN')}</p>`;
         invoiceHTML += `</div></div>`;
 
-        // Mở cửa sổ in
-        const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write(invoiceHTML);
-        printWindow.document.close();
-        printWindow.print();
+        // Tạo PDF từ HTML
+        const element = document.createElement('div');
+        element.innerHTML = invoiceHTML;
+        element.style.position = 'absolute';
+        element.style.left = '-9999px'; // Ẩn element
+        document.body.appendChild(element);
 
-        setSuccess('Hóa đơn được xuất thành công');
-        setTimeout(() => setSuccess(null), 3000);
+        const options = {
+          margin: 0.5,
+          filename: `HoaDon_${reservation.id}_${new Date().toISOString().split('T')[0]}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(options).from(element).save().then(() => {
+          document.body.removeChild(element);
+          setSuccess('Hóa đơn PDF được xuất thành công');
+          setTimeout(() => setSuccess(null), 3000);
+        }).catch(err => {
+          document.body.removeChild(element);
+          console.error('Error generating PDF:', err);
+          setError('Lỗi khi xuất PDF');
+        });
       } catch(err) {
         console.error('Error generating invoice:', err);
         const msg = err?.response?.data?.message || err?.message || 'Lỗi khi xuất hóa đơn';
