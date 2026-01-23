@@ -18,20 +18,11 @@
 
     async function load(){
       try {
-        const [t, r] = await Promise.all([getTables(), getReservations()])
-        setCurrentPage(1)
-        setTables(t)
-        setReservations(r)
+        const [t, r] = await Promise.all([getTables(), getReservations()]);
+        setReservations(r);
+        setTables(refreshTablesStatus(t, r));
       } catch(err) { console.error('Error:', err) }
     }
-
-    async function load() {
-  try {
-    const [t, r] = await Promise.all([getTables(), getReservations()]);
-    setReservations(r);
-    setTables(refreshTablesStatus(t, r));
-  } catch(err) { console.error('Error:', err) }
-}
 
 // Hàm helper để cập nhật trạng thái bàn
 function refreshTablesStatus(tablesList, reservationsList) {
