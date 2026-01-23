@@ -142,18 +142,18 @@ async function save(){
         
         // Lấy danh sách orders liên quan đến reservation này
         const allOrders = await getOrders();
-        const orders = allOrders.filter(o => o.reservation?.id === reservation.id && o.status === 'COMPLETED');
+        const orders = allOrders.filter(o => o.reservation?.id === reservation.id);
         
         if (!orders || orders.length === 0) {
           setError('Không tìm thấy đơn hàng nào cho đặt bàn này');
           return;
         }
 
-        // Lọc orders có items và total > 0
-        const validOrders = orders.filter(o => o.items && o.items.length > 0 && (o.total || 0) > 0);
+        // Lọc orders có items (không yêu cầu total > 0 nữa)
+        const validOrders = orders.filter(o => o.items && o.items.length > 0);
         
         if (validOrders.length === 0) {
-          setError('Không có đơn hàng hợp lệ (không có items hoặc tổng tiền = 0)');
+          setError('Không có đơn hàng hợp lệ (không có items)');
           return;
         }
 
